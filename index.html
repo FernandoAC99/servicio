@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>Fernando Arteaga Cortez</header>
+
+    <div class="container">
+
+        <nav>
+
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Ver datos</button>
+                <button class="nav-link " id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Registrar</button>
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+
+                <div class="col-md-10">
+                    <table class="table  table-responsive" style="color: white;">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Apellido</th>
+                                <th scope="col">Correo electrónico</th>
+                                <th scope="col">Fotografía</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="response">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tab-pane fade col-md-6" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                <form action="" style="color: white;">
+                    <div>
+                        <label for="name">Nombre</label>
+                        <input type="text" class="form-control" id="name" placeholder="Ingresa tu nombre">
+
+                    </div>
+
+                    <div>
+                        <label for="job">Trabajo</label>
+                        <input type="text" class="form-control" id="job" placeholder="Ingresa tu trabajo">
+
+                    </div>
+                    <button type="button" onclick="registro()" class="btn btn-primary" style="margin-top:5%">Registrar</button>
+
+                </form>
+            </div>
+        </div>
+
+
+
+
+
+
+    </div>
+
+    <footer style="text-align:center">
+        2021 - Universidad Tecnológica Emiliano Zapata del Estado de Morelos
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+
+    <script>
+        let listAux = [];
+
+        function get() {
+            return new Promise(function(resolve, reject) {
+                var req = new XMLHttpRequest();
+                req.open('GET', 'https://reqres.in/api/users?page=2');
+
+                req.onload = function() {
+                    if (req.status == 200) {
+                        resolve(JSON.parse(req.response));
+                    } else {
+                        reject();
+                    }
+                };
+
+                req.send();
+            })
+        }
+
+        get().then(data => {
+
+            console.log(data.data);
+            let res = document.querySelector('#response');
+            let list = JSON.stringify(data.data)
+            let aux = JSON.parse(list);
+            console.log(aux);
+            res.innerHTML = '';
+            listAux = aux;
+            i = 1;
+            for (let item of listAux) {
+                console.log(item);
+                res.innerHTML += `
+                <tr>
+                    <td>${i++}</td>
+                    <td>${item.first_name}</td>
+                    <td>${item.last_name}</td>
+                    <td> <image src="${item.avatar}"></image> </td>
+
+                </tr>
+                `;
+            }
+        });
+
+
+        function create() {
+            let res2 = document.querySelector('#response');
+            res2.innerHTML += `
+                <tr>
+                    <td>${i++}</td>
+
+                    <td>${document.getElementById('name').value}</td>
+                    <td>${document.getElementById('job').value}</td>
+                </tr>
+                `;
+        };
+
+
+        var peticion;
+
+        function registro() {
+            let url = 'https://reqres.in/api/users';
+            let obj = {
+                name: document.getElementById('name').value,
+                job: document.getElementById('job').value
+            }
+            console.log(obj);
+            let aux = JSON.stringify(obj)
+            console.log(aux);
+
+            return new Promise(function(resolve, reject) {
+
+                peticion = new XMLHttpRequest();
+                peticion.onreadystatechange = alertContents;
+                peticion.open('POST', url);
+                peticion.setRequestHeader('Content-Type', 'application/json');
+                peticion.send(aux);
+            });
+        };
+
+        function alertContents() {
+            if (peticion.readyState === XMLHttpRequest.DONE) {
+                if (peticion.status === 200) {
+                    alert(peticion.responseText);
+                } else {
+                    alert("se registro" + peticion.responseText);
+                    create();
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

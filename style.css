@@ -1,0 +1,49 @@
+body {
+    background-color: rgb(255, 255, 255);
+    background-image: url("/bg.png");
+    background-repeat: no-repeat;
+    background-size: 90rem;
+}
+
+header {
+    background-color: rgb(0, 0, 0);
+    color: white;
+    padding: 2%;
+    width: 100%;
+    margin-bottom: 3%;
+}
+
+.container {
+    background: rgba(0, 0, 0, 0.7);
+    width: 60%;
+    padding: 5%;
+    -webkit-box-shadow: 0px 5px 15px -2px #000000;
+    box-shadow: 0px 5px 15px -2px #000000;
+    border-radius: 10px;
+    height: 28rem;
+    width: 60%;
+    overflow-y: scroll;
+}
+
+footer {
+    margin-top: 10%;
+    background-color: rgb(0, 0, 0);
+    color: white;
+    padding: 1%;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.form-group {
+    margin-top: 2%;
+}
+
+#mensajes {
+    height: auto;
+}
+
+.texto {
+    padding: 4px;
+    background: #fff;
+}
